@@ -1,7 +1,13 @@
 #ifndef __CLI_H__
 #define __CLI_H__
 
-extern int32_t cli_begin(int32_t i_argc, char *pc_argv[]);
+typedef struct {
+	const char	*pc_script;
+	int32_t 	i_argc;	
+	const char 	**ppc_argv;
+} cli_s;
+
+extern int32_t cli_begin(cli_s *pst_cli);
 
 extern int32_t cli_exec(void);
 

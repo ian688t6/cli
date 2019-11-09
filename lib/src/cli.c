@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include "cli.h"
 
-int32_t cli_begin(int32_t i_argc, char *pc_argv[])
+int32_t cli_begin(cli_s *pst_cli)
 {
 	int32_t i = 0;
 
-	for (i = 0; i < i_argc; i ++) {
-		printf("%s\n", pc_argv[i]);
+	printf("script: %s\n", pst_cli->pc_script);
+	for (i = 0; i < pst_cli->i_argc; i ++) {
+		printf("%s\n", pst_cli->ppc_argv[i]);
 	}
 
 	return 0;

@@ -4,16 +4,17 @@
 #include <string.h>
 #include "cli.h"
 
-int32_t main(int32_t i_argc, char *pc_argv[])
+int32_t main(int32_t i_argc, const char **ppc_argv)
 {
-	const char *pc_script = NULL;
-	
+	cli_s st_cli;
+
 	if (i_argc < 2)
 		printf("cli invalid params\n");
 	
-	pc_script = pc_argv[1];
-	printf("script path: %s\n", pc_script);
-	cli_begin(i_argc - 1, &pc_argv[1]);	
+	st_cli.pc_script 	= ppc_argv[1];
+	st_cli.i_argc		= i_argc - 2;
+	st_cli.ppc_argv		= &ppc_argv[2];	
+	cli_begin(&st_cli);	
 
 	return 0;
 }
