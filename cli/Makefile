@@ -4,8 +4,8 @@ LOC_SRC = src
 SRC = $(wildcard ${LOC_SRC}/*.c)
 OBJ = $(patsubst %.c,${LOC_SRC}/%.o,$(notdir ${SRC})) 
 
-CFLAGS += -I$(LIB)/inc
-LDFLAG := -static -fdata-sections -ffunction-sections -Wl,-dn -L$(LIB) -lcli -lm -lrt
+CFLAGS += -I$(LIBS)/inc
+LDFLAG := -static -fdata-sections -ffunction-sections -Wl,-dn -L$(LIBS) -lcli -lm -lrt
 TARGET = cli
 
 .PHONY: all clean cleanall

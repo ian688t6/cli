@@ -6,14 +6,19 @@ OBJ = $(patsubst %.c,${LOC_SRC}/%.o,$(notdir ${SRC}))
 
 CFLAGS += -I$(LIB)/inc
 LDFLAG := -static -fdata-sections -ffunction-sections -Wl,-dn -L$(LIB) -lcli -lm -lrt
-TARGET = libcli
+TARGET = libcli.a
 
 .PHONY: all clean cleanall
 
 all: ${TARGET}
 ${TARGET}:${OBJ}
 	@echo "make lib"
+	@$(AR) rc $@ $^
+%.o:%.c
+	$(CC) $(CFLAGS) $(LDFLAG) -c $< -o $@
 
 clean: 
 	@echo "make clean lib"
+	@rm -rf ${OBJ}
+	@rm -rf *.a
 
