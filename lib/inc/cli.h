@@ -5,6 +5,13 @@
 #define CLI_ARG_BUFLEN		(256)
 #define CLI_FUN_BUFLEN		(256)
 #define CLI_ARG_NAMELEN		(32)
+#define CLI_LINE_BUFLEN		(1024)
+
+#define CLI_TAG_FUNCTION		"[function]"
+#define CLI_TAG_PARAMS			"[parameters]"
+#define CLI_TAG_PARAM_NAME		"<name"
+#define CLI_TAG_PARAM_TYPE		"<type"
+#define CLI_TAG_PARAM_DEFVAL	"<defval"
 
 typedef enum {
 	CLI_TYPE_UINT8,
@@ -16,14 +23,21 @@ typedef enum {
 } cli_type_e;
 
 typedef struct {
+	char ac_func_name[CLI_FUN_BUFLEN];
+	uint32_t ui_args_size;
+	int32_t (*cli_func)(void *pv_arg);	
+} cli_func_tb_s;
+
+typedef struct {
 	const char	*pc_script;
 	int32_t 	i_argc;	
 	const char 	**ppc_argv;
+	cli_func_tb_s *pst_tb;
 } cli_s;
 
 typedef struct {
 	FILE *pf_file;	
-	char ac_func_name[CLI_FUN_BUFLEN];	
+	cli_func_tb_s *pst_func;	
 	struct list_head *pst_arg_list;	
 } cli_func_s;
 
