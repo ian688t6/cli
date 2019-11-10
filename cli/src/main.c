@@ -15,7 +15,8 @@ int32_t main(int32_t i_argc, const char **ppc_argv)
 	st_cli.i_argc		= i_argc - 2;
 	st_cli.ppc_argv		= &ppc_argv[2];	
 	cli_begin(&st_cli);	
-
+	cli_exec();
+	cli_end();
 	return 0;
 }
 

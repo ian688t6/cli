@@ -3,6 +3,7 @@
 #include "list.h"
 
 #define CLI_ARG_BUFLEN		(256)
+#define CLI_FUN_BUFLEN		(256)
 #define CLI_ARG_NAMELEN		(32)
 
 typedef enum {
@@ -21,6 +22,13 @@ typedef struct {
 } cli_s;
 
 typedef struct {
+	FILE *pf_file;	
+	char ac_func_name[CLI_FUN_BUFLEN];	
+	struct list_head *pst_arg_list;	
+} cli_func_s;
+
+typedef struct {
+	struct list_head *list;	
 	cli_type_e	em_type;
 	char 		ac_arg_name[CLI_ARG_NAMELEN];
 	uint32_t	ui_size;
