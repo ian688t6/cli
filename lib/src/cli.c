@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 #include "cli.h"
 
 static cli_s *gpst_cli;
@@ -25,20 +26,87 @@ static int32_t parse_function(FILE *pf_file)
 	return i_ret;
 }
 
+static int32_t get_param_name(char *pc_src, char *pc_dst)
+{
+	char *pc_save = pc_dst;	
+	
+	pc_src += strlen(CLI_TAG_PARAM_NAME);
+	while ('\0' != *pc_src) {
+		if ('>' == *pc_src)
+			break;
+		*pc_dst ++ = *pc_src ++;
+	}
+	*pc_dst = '\0';
+
+	return (('>' == *pc_src) && (pc_dst - pc_save)) ? 0 : -1;
+}
+
+static int32_t get_param_type(char *pc_src, cli_type_e *pem_type, uint32_t *pui_size)
+{
+	pc_src += strlen(CLI_TAG_PARAM_TYPE);
+	
+	if (strstr(pc_src, CLI_TAG_PARAM_UINT8)) {
+		*pem_type = CLI_TYPE_UINT8;
+		*pui_size = 1;	
+		return 0;
+	}
+
+	if (strstr(pc_src, CLI_TAG_PARAM_UINT16)) {
+		*pem_type = CLI_TYPE_UINT16;
+		*pui_size = 2;
+		return 0;
+	}
+
+	if (strstr(pc_src, CLI_TAG_PARAM_UINT32)) {
+		*pem_type = CLI_TYPE_UINT32;
+		*pui_size = 4;
+		return 0;
+	}
+
+	if (strstr(pc_src, CLI_TAG_PARAM_UINT64)) {
+		*pem_type = CLI_TYPE_UINT64;
+		*pui_size = 8;
+		return 0;
+	}
+	
+	if (strstr(pc_src, CLI_TAG_PARAM_STRING)) {
+		*pem_type = CLI_TYPE_STRING;
+		pc_src += strlen(CLI_TAG_PARAM_STRING);
+		*pui_size = strtoul(pc_src, NULL, 10);
+		return 0;	
+	}
+	
+	return -1;
+}
+
 static int32_t parse_params(FILE *pf_file)
 {
 	int32_t i_ret = 0;
+	char *pc_ptr = NULL;
 	char ac_line[CLI_LINE_BUFLEN] = {0};
-	
+	char ac_arg_name[CLI_ARG_NAMELEN] = {0};
+	uint32_t ui_size;
+	cli_type_e em_type;
+
 	while (fgets(ac_line, CLI_LINE_BUFLEN, pf_file)) {
-		if (strstr(ac_line, CLI_TAG_PARAM_NAME)) {
+		pc_ptr = strstr(ac_line, CLI_TAG_PARAM_NAME);
+		if (pc_ptr) {
+			if (0 != get_param_name(pc_ptr, ac_arg_name)) {
+				return -1;
+			}
 		}
-
-		if (strstr(ac_line, CLI_TAG_PARAM_TYPE)) {
+		
+		pc_ptr = strstr(ac_line, CLI_TAG_PARAM_TYPE);
+		if (pc_ptr) {
+			if (0 != get_param_type(pc_ptr, &em_type, &ui_size)) {
+				return -1;	
+			}	
 		}
-
-		if (strstr(ac_line, CLI_TAG_PARAM_DEFVAL)) {
+		
+		pc_ptr = strstr(ac_line, CLI_TAG_PARAM_DEFVAL);
+		if (pc_ptr) {
 		}
+		printf("%s %d %d\n", ac_arg_name, em_type, ui_size);	
 	}
 
 	return i_ret;

@@ -9,9 +9,14 @@
 
 #define CLI_TAG_FUNCTION		"[function]"
 #define CLI_TAG_PARAMS			"[parameters]"
-#define CLI_TAG_PARAM_NAME		"<name"
-#define CLI_TAG_PARAM_TYPE		"<type"
-#define CLI_TAG_PARAM_DEFVAL	"<defval"
+#define CLI_TAG_PARAM_NAME		"<name:"
+#define CLI_TAG_PARAM_TYPE		"<type:"
+#define CLI_TAG_PARAM_DEFVAL	"<defval:"
+#define CLI_TAG_PARAM_UINT8		"uint8_t"
+#define CLI_TAG_PARAM_UINT16	"uint16_t"
+#define CLI_TAG_PARAM_UINT32	"uint32_t"
+#define CLI_TAG_PARAM_UINT64	"uint64_t"
+#define CLI_TAG_PARAM_STRING	"string"
 
 typedef enum {
 	CLI_TYPE_UINT8,
@@ -19,7 +24,6 @@ typedef enum {
 	CLI_TYPE_UINT32,
 	CLI_TYPE_UINT64,
 	CLI_TYPE_STRING,
-	CLI_TYPE_BINARY,
 } cli_type_e;
 
 typedef struct {
@@ -37,14 +41,14 @@ typedef struct {
 
 typedef struct {
 	FILE *pf_file;	
-	cli_func_tb_s *pst_func;	
+	cli_func_tb_s *pst_func;
 	struct list_head *pst_arg_list;	
 } cli_func_s;
 
 typedef struct {
 	struct list_head *list;	
 	cli_type_e	em_type;
-	char 		ac_arg_name[CLI_ARG_NAMELEN];
+	char 		ac_arg_name[CLI_ARG_NAMELEN];	
 	uint32_t	ui_size;
 	uint8_t		auc_arg_buf[CLI_ARG_BUFLEN];
 } cli_arg_s;
