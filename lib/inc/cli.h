@@ -2,6 +2,17 @@
 #define __CLI_H__
 #include "list.h"
 
+#define LOG_EN	(1)
+#ifdef LOG_EN
+#define cli_logi(format, arg...) printf("INFOM: " format "\r\n", ##arg)
+#define cli_logw(format, arg...) printf("WARN: " format "\r\n", ##arg)
+#define cli_loge(format, arg...) printf("ERROR: " format "\r\n", ##arg)
+#else
+#define cli_logi(format, arg...)
+#define cli_logw(format, arg...)
+#define cli_loge(format, arg...)
+#endif
+
 #define CLI_ARG_BUFLEN		(256)
 #define CLI_FUN_BUFLEN		(256)
 #define CLI_ARG_NAMELEN		(32)
