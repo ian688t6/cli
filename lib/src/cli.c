@@ -79,12 +79,54 @@ static int32_t get_param_type(char *pc_src, cli_type_e *pem_type, uint32_t *pui_
 	return -1;
 }
 
+static int32_t get_param_defval(char *pc_src, cli_type_e em_type, uint8_t *puc_val)
+{
+	uint64_t ul_val = 0;
+	char *pc_tmp = NULL;
+	
+	pc_src += strlen(CLI_TAG_PARAM_DEFVAL);
+	switch (em_type) {
+	case CLI_TYPE_UINT8:
+	ul_val = strtoul(pc_src, 0, 0);	
+	memcpy(puc_val, (uint8_t *)&ul_val, sizeof(uint8_t));	
+	break;
+	
+	case CLI_TYPE_UINT16:
+	ul_val = strtoul(pc_src, 0, 0);	
+	memcpy(puc_val, (uint16_t *)&ul_val, sizeof(uint16_t));	
+	break;
+	
+	case CLI_TYPE_UINT32:
+	ul_val = strtoul(pc_src, 0, 0);	
+	memcpy(puc_val, (uint32_t *)&ul_val, sizeof(uint32_t));	
+	break;
+	
+	case CLI_TYPE_UINT64:
+	ul_val = strtoul(pc_src, 0, 0);	
+	memcpy(puc_val, (uint64_t *)&ul_val, sizeof(uint64_t));	
+	break;
+	
+	case CLI_TYPE_STRING:
+	strcpy((char *)puc_val, pc_src);
+	pc_tmp = strrchr((char *)puc_val, '>');
+	*pc_tmp = '\0';
+	break;
+	
+	default:
+	return -1;	
+	break;
+	}
+
+	return 0;
+}
+
 static int32_t parse_params(FILE *pf_file)
 {
 	int32_t i_ret = 0;
 	char *pc_ptr = NULL;
 	char ac_line[CLI_LINE_BUFLEN] = {0};
 	char ac_arg_name[CLI_ARG_NAMELEN] = {0};
+	uint8_t	auc_arg_buf[CLI_ARG_BUFLEN] = {0};
 	uint32_t ui_size;
 	cli_type_e em_type;
 
@@ -105,6 +147,9 @@ static int32_t parse_params(FILE *pf_file)
 		
 		pc_ptr = strstr(ac_line, CLI_TAG_PARAM_DEFVAL);
 		if (pc_ptr) {
+			if (0 != get_param_defval(pc_ptr, em_type, auc_arg_buf)) {
+				return -1;	
+			}	
 		}
 		printf("%s %d %d\n", ac_arg_name, em_type, ui_size);	
 	}
@@ -139,7 +184,6 @@ static int32_t parse_script(FILE *pf_file)
 
 int32_t cli_begin(cli_s *pst_cli)
 {
-	//int32_t i = 0;
 	cli_func_s *pst_func = &gst_func;
 	gpst_cli = pst_cli;
 	
