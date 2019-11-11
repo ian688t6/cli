@@ -6,6 +6,7 @@
 
 static cli_s *gpst_cli;
 static cli_func_s gst_func;
+static uint8_t gauc_cli_buf[CLI_BUF_LEN] = {0};
 
 static int32_t parse_function(FILE *pf_file)
 {
@@ -127,9 +128,12 @@ static int32_t parse_params(FILE *pf_file)
 	char ac_line[CLI_LINE_BUFLEN] = {0};
 	char ac_arg_name[CLI_ARG_NAMELEN] = {0};
 	uint8_t	auc_arg_buf[CLI_ARG_BUFLEN] = {0};
-	uint32_t ui_size;
-	cli_type_e em_type;
-
+	uint32_t ui_size = 0;
+	cli_func_s *pst_func = &gst_func;
+	cli_arg_s *pst_arg;
+	cli_type_e em_type = CLI_TYPE_INVALID;
+		
+	INIT_LIST_HEAD(&pst_func->st_arg_list);
 	while (fgets(ac_line, CLI_LINE_BUFLEN, pf_file)) {
 		pc_ptr = strstr(ac_line, CLI_TAG_PARAM_NAME);
 		if (pc_ptr) {
@@ -151,7 +155,13 @@ static int32_t parse_params(FILE *pf_file)
 				return -1;	
 			}	
 		}
-		printf("%s %d %d\n", ac_arg_name, em_type, ui_size);	
+		printf("%s %d %d\n", ac_arg_name, em_type, ui_size);
+		pst_arg = (cli_arg_s *)malloc(sizeof(cli_arg_s));	
+		strcpy(pst_arg->ac_arg_name, ac_arg_name);	
+		pst_arg->em_type = em_type;
+		pst_arg->ui_size = ui_size;
+		memcpy(pst_arg->auc_arg_buf, auc_arg_buf, ui_size);
+		list_add_tail(&pst_arg->list, &pst_func->st_arg_list);
 	}
 
 	return i_ret;
@@ -182,6 +192,29 @@ static int32_t parse_script(FILE *pf_file)
 	return i_ret;
 }
 
+static int32_t parse_inputarg(char *pc_arg, char *pc_arg_name, char *pc_arg_val)
+{
+	if (!pc_arg || !pc_arg_name || !pc_arg_val)
+		return -1;
+	
+	sscanf(pc_arg, "%s=%s", pc_arg_name, pc_arg_val);
+	return 0;
+}
+
+static cli_arg_s *lookup_arg(char *pc_arg_name)
+{
+	cli_func_s *pst_func = &gst_func;
+	cli_arg_s *pst_node;
+	cli_arg_s *pst_tmp_node;
+	if (!list_empty(&pst_func->st_arg_list)) {
+		list_for_each_entry_safe(pst_node, pst_tmp_node, &pst_func->st_arg_list, list) {
+			if (!strcmp(pc_arg_name, pst_node->ac_arg_name))
+				return pst_node;
+		}
+	}
+	return NULL;
+}
+
 int32_t cli_begin(cli_s *pst_cli)
 {
 	cli_func_s *pst_func = &gst_func;
@@ -204,11 +237,62 @@ int32_t cli_begin(cli_s *pst_cli)
 
 int32_t cli_exec(void)
 {
+	int32_t i = 0;
+	char ac_arg_name[CLI_ARG_NAMELEN] = {0};
+	uint8_t	auc_arg_buf[CLI_ARG_BUFLEN] = {0};
+	cli_arg_s *pst_node;
+	cli_arg_s *pst_tmp_node;
+	
+	for (i = 0; i < gpst_cli->i_argc; i ++) {
+		parse_inputarg(gpst_cli->ppc_argv[i], ac_arg_name, (char *)auc_arg_buf);	
+		pst_node = lookup_arg(ac_arg_name);	
+		if (pst_node) {
+			switch (pst_node->em_type) {
+			case CLI_TYPE_UINT8:
+			ul_val = strtoul(pc_src, 0, 0);	
+			memcpy(puc_val, (uint8_t *)&ul_val, sizeof(uint8_t));	
+			break;
+	
+			case CLI_TYPE_UINT16:
+			ul_val = strtoul(pc_src, 0, 0);	
+			memcpy(puc_val, (uint16_t *)&ul_val, sizeof(uint16_t));	
+			break;
+	
+			case CLI_TYPE_UINT32:
+			ul_val = strtoul(pc_src, 0, 0);	
+			memcpy(puc_val, (uint32_t *)&ul_val, sizeof(uint32_t));	
+			break;
+	
+			case CLI_TYPE_UINT64:
+			ul_val = strtoul(pc_src, 0, 0);	
+			memcpy(puc_val, (uint64_t *)&ul_val, sizeof(uint64_t));	
+			break;
+	
+			case CLI_TYPE_STRING:
+			strcpy((char *)puc_val, pc_src);
+			pc_tmp = strrchr((char *)puc_val, '>');
+			*pc_tmp = '\0';
+			break;
+			
+			}	
+		}	
+	}
+
 	return 0;
 }
 
 void cli_end(void)
 {
+	cli_func_s *pst_func = &gst_func;
+	cli_arg_s *pst_node;
+	cli_arg_s *pst_tmp_node;
+
+	if (!list_empty(&pst_func->st_arg_list)) {
+		list_for_each_entry_safe(pst_node, pst_tmp_node, &pst_func->st_arg_list, list) {
+			list_del(&pst_node->list);
+			free(pst_node);
+		}	
+	}	
 	
 	return;
 }
