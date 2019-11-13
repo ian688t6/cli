@@ -10,16 +10,30 @@ static uint8_t gauc_cli_buf[CLI_BUF_LEN] = {0};
 
 static void print_arg(cli_type_e em_type, char *pc_arg_name, uint8_t *puc_arg)
 {
+	uint8_t 	uc_val = 0;
+	uint16_t 	us_val = 0;
+	uint32_t 	ui_val = 0;
+	uint64_t 	ul_val = 0;
+	
 	switch (em_type) {
 	case CLI_TYPE_UINT8:
+		uc_val = *puc_arg;	
+		printf("%-32s:\t%d\n", pc_arg_name, uc_val);
 	break;
 	case CLI_TYPE_UINT16:
+		us_val = *(uint16_t *)puc_arg;	
+		printf("%-32s:\t%d\n", pc_arg_name, us_val);
 	break;
 	case CLI_TYPE_UINT32:
+		ui_val = *(uint32_t *)puc_arg;	
+		printf("%-32s:\t%d\n", pc_arg_name, ui_val);
 	break;
 	case CLI_TYPE_UINT64:
+		ul_val = *(uint64_t *)puc_arg;	
+		printf("%-32s:\t%ld\n", pc_arg_name, ul_val);
 	break;
 	case CLI_TYPE_STRING:
+		printf("%-32s:\t%s\n", pc_arg_name, puc_arg);	
 	break;
 	default:break;	
 	}
@@ -35,7 +49,6 @@ static int32_t parse_function(FILE *pf_file)
 	while (fgets(ac_line, CLI_LINE_BUFLEN, pf_file)) {
 		for (i = 0; gpst_cli->pst_tb[i].cli_func; i ++) {
 			if (strstr(ac_line, gpst_cli->pst_tb[i].ac_func_name)) {
-				printf("find func: %s\n", gpst_cli->pst_tb[i].ac_func_name);	
 				gst_func.pst_func = &gpst_cli->pst_tb[i];
 				return 0;
 			}	
@@ -300,15 +313,18 @@ int32_t cli_exec(void)
 	
 	if (!list_empty(&pst_func->st_arg_list)) {
 		list_for_each_entry_safe(pst_node, pst_tmp_node, &pst_func->st_arg_list, list) {
+			print_arg(pst_node->em_type, pst_node->ac_arg_name, pst_node->auc_arg_buf);			
 			memcpy(puc_ptr, pst_node->auc_arg_buf, pst_node->ui_size);
 			puc_ptr += pst_node->ui_size;
 		}
 	}
 	puc_ptr = gauc_cli_buf;	
 	if (0 != pst_func->pst_func->cli_func(puc_ptr)) {
+		printf("fail\n");	
 		return -1;
 	}
 
+	printf("succ\n");	
 	return 0;
 }
 
@@ -320,7 +336,6 @@ void cli_end(void)
 
 	if (!list_empty(&pst_func->st_arg_list)) {
 		list_for_each_entry_safe(pst_node, pst_tmp_node, &pst_func->st_arg_list, list) {
-			print_arg(pst_node->em_type, pst_node->ac_arg_name, pst_node->auc_arg_buf);			
 			list_del(&pst_node->list);
 			free(pst_node);
 		}	
