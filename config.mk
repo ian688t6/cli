@@ -1,5 +1,5 @@
 export TOP:= $(shell pwd)
-export LIBS := $(TOP)/lib
+export LIBS := $(TOP)/libs
 export CROSS_COMPILE ?=
 export CC := $(CROSS_COMPILE)gcc
 export AR := $(CROSS_COMPILE)ar
