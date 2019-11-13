@@ -16,7 +16,7 @@ ${TARGET}:${OBJ}
 	$(CC) $^ -o $@ $(CFLAGS) $(LDFLAG)
 
 ${LOC_SRC}/%.o:${LOC_SRC}/%.c
-	$(CC) -c $(INC) $(CFLAGS) $< -o $@ 
+	$(CC) -c -I$(LOC_INC) $(CFLAGS) $< -o $@ 
 
 clean: 
 	@echo "make clean bin"
