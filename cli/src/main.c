@@ -4,9 +4,18 @@
 #include <string.h>
 #include "cli.h"
 
+typedef struct {
+	char ac_stu_name[32];
+	uint16_t us_score;
+	uint32_t ui_age;
+} __attribute__ ((packed))xxx_s;
+
 static int32_t cli_xxx_set(void *pv_arg)
 {
-	printf("xxx_set\n");	
+	xxx_s *pst_xxx = (xxx_s *)pv_arg;
+
+	printf("xxx_set %s %d %d\n", pst_xxx->ac_stu_name, pst_xxx->us_score, pst_xxx->ui_age);	
+				
 	return 0;
 }
 
