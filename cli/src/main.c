@@ -19,8 +19,20 @@ static int32_t cli_xxx_set(void *pv_arg)
 	return 0;
 }
 
+static int32_t cli_xxx_get(void *pv_arg)
+{
+	xxx_s *pst_xxx = (xxx_s *)pv_arg;
+
+	strcpy(pst_xxx->ac_stu_name, "YinJia");
+	pst_xxx->us_score = 100;
+	pst_xxx->ui_age = 32;
+
+	return 0;
+}
+
 static cli_func_tb_s gast_fn_tb[] = {
-	{ "xxx_set", sizeof(uint32_t), cli_xxx_set },
+	{ "xxx_set", sizeof(xxx_s), cli_xxx_set },
+	{ "xxx_get", sizeof(xxx_s), cli_xxx_get },
 	{ "", 0, 0 },
 };
 

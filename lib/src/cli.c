@@ -51,8 +51,8 @@ static int32_t parse_function(FILE *pf_file)
 			if (strstr(ac_line, gpst_cli->pst_tb[i].ac_func_name)) {
 				gst_func.pst_func = &gpst_cli->pst_tb[i];
 				return 0;
-			}	
-		}	
+			}
+		}
 	}
 
 	return i_ret;
@@ -193,7 +193,7 @@ static int32_t parse_params(FILE *pf_file)
 		memcpy(pst_arg->auc_arg_buf, auc_arg_buf, ui_size);
 		list_add_tail(&pst_arg->list, &pst_func->st_arg_list);
 	}
-
+	
 	return i_ret;
 }
 
@@ -313,17 +313,31 @@ int32_t cli_exec(void)
 	
 	if (!list_empty(&pst_func->st_arg_list)) {
 		list_for_each_entry_safe(pst_node, pst_tmp_node, &pst_func->st_arg_list, list) {
-			print_arg(pst_node->em_type, pst_node->ac_arg_name, pst_node->auc_arg_buf);			
+	//		print_arg(pst_node->em_type, pst_node->ac_arg_name, pst_node->auc_arg_buf);			
 			memcpy(puc_ptr, pst_node->auc_arg_buf, pst_node->ui_size);
 			puc_ptr += pst_node->ui_size;
 		}
 	}
+	
+	if (pst_func->pst_func->ui_args_size != (puc_ptr - gauc_cli_buf)) {
+		printf("fail\n");	
+		return -1;
+	}	
+	
 	puc_ptr = gauc_cli_buf;	
 	if (0 != pst_func->pst_func->cli_func(puc_ptr)) {
 		printf("fail\n");	
 		return -1;
 	}
-
+	
+	if (!list_empty(&pst_func->st_arg_list)) {
+		list_for_each_entry_safe(pst_node, pst_tmp_node, &pst_func->st_arg_list, list) {
+			memcpy(pst_node->auc_arg_buf, puc_ptr, pst_node->ui_size);
+			print_arg(pst_node->em_type, pst_node->ac_arg_name, pst_node->auc_arg_buf);			
+			puc_ptr += pst_node->ui_size;
+		}
+	}
+	
 	printf("succ\n");	
 	return 0;
 }
