@@ -1,0 +1,7 @@
+[function]
+versid_get
+
+[parameters]
+<name:chip_id>			<type:uint16_t>	<defval:0>
+<name:major_vers>		<type:uint16_t>	<defval:0>
+<name:minor_vers>		<type:uint16_t>	<defval:0>

@@ -1,7 +1,0 @@
-[function]
-xxx_get
-
-[parameters]
-<name:ac_stu_name>	<type:string32>	<defval:FanZhenzhen>
-<name:us_score>		<type:uint16_t>	<defval:80>
-<name:ui_age>		<type:uint32_t>	<defval:23>

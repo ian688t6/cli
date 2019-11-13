@@ -3,36 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cli.h"
-
-typedef struct {
-	char ac_stu_name[32];
-	uint16_t us_score;
-	uint32_t ui_age;
-} __attribute__ ((packed))xxx_s;
-
-static int32_t cli_xxx_set(void *pv_arg)
-{
-	xxx_s *pst_xxx = (xxx_s *)pv_arg;
-
-	printf("xxx_set %s %d %d\n", pst_xxx->ac_stu_name, pst_xxx->us_score, pst_xxx->ui_age);	
-				
-	return 0;
-}
-
-static int32_t cli_xxx_get(void *pv_arg)
-{
-	xxx_s *pst_xxx = (xxx_s *)pv_arg;
-
-	strcpy(pst_xxx->ac_stu_name, "YinJia");
-	pst_xxx->us_score = 100;
-	pst_xxx->ui_age = 32;
-
-	return 0;
-}
+#include "cfsio.h"
 
 static cli_func_tb_s gast_fn_tb[] = {
-	{ "xxx_set", sizeof(xxx_s), cli_xxx_set },
-	{ "xxx_get", sizeof(xxx_s), cli_xxx_get },
+	{ "reg_get", 	sizeof(cfsio_reg_s), cfsio_reg_get },
+	{ "reg_set", 	sizeof(cfsio_reg_s), cfsio_reg_set },
+	{ "versid_get", sizeof(cfsio_versid_s), cfsio_versid_get },
 	{ "", 0, 0 },
 };
 

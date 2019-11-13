@@ -1,0 +1,6 @@
+[function]
+reg_get
+
+[parameters]
+<name:reg>		<type:uint16_t>	<defval:0>
+<name:val>		<type:uint8_t>	<defval:0>

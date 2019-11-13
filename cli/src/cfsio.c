@@ -20,6 +20,24 @@ static int32_t cfsio_set(uint16_t us_reg, uint8_t *puc_val, uint8_t uc_len)
 	return i_ret;
 }
 
+int32_t cfsio_reg_get(void *pv_arg)
+{
+	int32_t i_ret = 0;
+	return i_ret;
+}
+
+int32_t cfsio_reg_set(void *pv_arg)
+{
+	int32_t i_ret = 0;
+	return i_ret;
+}
+
+int32_t cfsio_versid_get(void *pv_arg)
+{
+	int32_t i_ret = 0;
+	return i_ret;
+}
+
 void cfsio_init(void)
 {
 	return;

@@ -18,19 +18,19 @@ static void print_arg(cli_type_e em_type, char *pc_arg_name, uint8_t *puc_arg)
 	switch (em_type) {
 	case CLI_TYPE_UINT8:
 		uc_val = *puc_arg;	
-		printf("%-32s:\t%d\n", pc_arg_name, uc_val);
+		printf("%-32s:\t%d hex(%02x)\n", pc_arg_name, uc_val, uc_val);
 	break;
 	case CLI_TYPE_UINT16:
 		us_val = *(uint16_t *)puc_arg;	
-		printf("%-32s:\t%d\n", pc_arg_name, us_val);
+		printf("%-32s:\t%d hex(%04x)\n", pc_arg_name, us_val, us_val);
 	break;
 	case CLI_TYPE_UINT32:
 		ui_val = *(uint32_t *)puc_arg;	
-		printf("%-32s:\t%d\n", pc_arg_name, ui_val);
+		printf("%-32s:\t%d hex(%08x)\n", pc_arg_name, ui_val, ui_val);
 	break;
 	case CLI_TYPE_UINT64:
 		ul_val = *(uint64_t *)puc_arg;	
-		printf("%-32s:\t%ld\n", pc_arg_name, ul_val);
+		printf("%-32s:\t%ld hex(%lx)\n", pc_arg_name, ul_val, ul_val);
 	break;
 	case CLI_TYPE_STRING:
 		printf("%-32s:\t%s\n", pc_arg_name, puc_arg);	
