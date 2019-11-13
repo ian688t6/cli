@@ -38,6 +38,8 @@ static cli_func_tb_s gast_fn_tb[] = {
 
 int32_t main(int32_t i_argc, const char **ppc_argv)
 {
+	int32_t i_ret = 0;
+
 	cli_s st_cli;
 
 	if (i_argc < 2)
@@ -47,9 +49,14 @@ int32_t main(int32_t i_argc, const char **ppc_argv)
 	st_cli.i_argc		= i_argc - 2;
 	st_cli.ppc_argv		= &ppc_argv[2];	
 	st_cli.pst_tb		= gast_fn_tb;
-	cli_begin(&st_cli);	
+	i_ret = cli_begin(&st_cli);	
+	if (0 != i_ret) {
+		goto end;
+	}	
 	cli_exec();
+end:	
 	cli_end();
+	
 	return 0;
 }
 

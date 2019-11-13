@@ -227,7 +227,7 @@ static int32_t parse_inputarg(const char *pc_arg, char *pc_arg_name, char *pc_ar
 	if (!pc_arg || !pc_arg_name || !pc_arg_val)
 		return -1;
 	
-	sscanf(pc_arg, "%s=%s", pc_arg_name, pc_arg_val);
+	sscanf(pc_arg, "%[^=]=%s", pc_arg_name, pc_arg_val);
 	return 0;
 }
 
