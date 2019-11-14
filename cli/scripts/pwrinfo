@@ -1,0 +1,10 @@
+[function]
+pwrinfo_get
+
+[parameters]
+<name:vrset>			<type:uint16_t>	<defval:0>
+<name:vrect>			<type:uint16_t>	<defval:0>
+<name:voset>			<type:uint16_t>	<defval:0>
+<name:vout>				<type:uint16_t>	<defval:0>
+<name:iout>				<type:uint16_t>	<defval:0>
+<name:pwr>				<type:uint16_t>	<defval:0>
