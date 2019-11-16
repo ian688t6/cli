@@ -136,9 +136,9 @@ typedef enum {
 typedef union {
 	uint8_t	uc_data;
 	struct {
-		uint8_t uc_ovc				:1; /** OVER_CURRENT */
+		uint8_t uc_ocp				:1; /** OVER_CURRENT */
 		uint8_t uc_ovp				:1; /** OVER_VOLTAGE */	
-		uint8_t uc_ovt				:1; /** OVER_TEMP */
+		uint8_t uc_otp				:1; /** OVER_TEMP */
 		uint8_t uc_ready			:1; /** RX Ready */
 		uint8_t uc_vout_on			:1; /** RX Vout on */
 		uint8_t uc_vout_chg			:1; /** RX Vout Changed */

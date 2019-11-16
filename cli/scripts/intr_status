@@ -1,0 +1,10 @@
+[function]
+intr_status
+
+[parameters]
+<name:ocp>			<type:uint8_t>	<defval:0>
+<name:ovp>			<type:uint8_t>	<defval:0>
+<name:otp>			<type:uint8_t>	<defval:0>
+<name:ready>		<type:uint8_t>	<defval:0>
+<name:vout_on>		<type:uint8_t>	<defval:0>
+<name:vout_chg>		<type:uint8_t>	<defval:0>

@@ -10,6 +10,10 @@ static cli_func_tb_s gast_fn_tb[] = {
 	{ "reg_set", 	sizeof(cfsio_reg_s), cfsio_reg_set },
 	{ "versid_get", sizeof(cfsio_versid_s), cfsio_versid_get },
 	{ "pwrinfo_get", sizeof(cfsio_pwrinfo_s), cfsio_pwrinfo_get },
+	{ "intr_get", sizeof(cfsio_intr_s), cfsio_get_intr },
+	{ "intr_set", sizeof(cfsio_intr_s), cfsio_set_intr },
+	{ "intr_status", sizeof(cfsio_intr_s), cfsio_get_intr_status },
+	{ "intr_clr", sizeof(cfsio_intr_s), cfsio_clr_intr },
 	{ "", 0, 0 },
 };
 

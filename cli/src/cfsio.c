@@ -46,6 +46,30 @@ int32_t cfsio_pwrinfo_get(void *pv_arg)
 	return i_ret;
 }
 
+int32_t cfsio_get_intr(void *pv_arg)
+{
+	int32_t i_ret = 0;
+	return i_ret;
+}
+
+int32_t cfsio_set_intr(void *pv_arg)
+{
+	int32_t i_ret = 0;
+	return i_ret;
+}
+
+int32_t cfsio_get_intr_status(void *pv_arg)
+{
+	int32_t i_ret = 0;
+	return i_ret;
+}
+
+int32_t cfsio_clr_intr(void *pv_arg)
+{
+	int32_t i_ret = 0;
+	return i_ret;
+}
+
 void cfsio_init(void)
 {
 	return;

@@ -21,6 +21,15 @@ typedef struct {
 	uint16_t	us_pwr;
 } __attribute__ ((packed)) cfsio_pwrinfo_s;
 
+typedef struct {
+	uint8_t		uc_ocp;
+	uint8_t		uc_ovp;
+	uint8_t		uc_otp;
+	uint8_t		uc_ready;
+	uint8_t		uc_vout_on;
+	uint8_t		uc_vout_chg;
+} __attribute__ ((packed)) cfsio_intr_s;
+
 extern void cfsio_init(void);
 
 extern int32_t cfsio_reg_get(void *pv_arg);
@@ -30,6 +39,14 @@ extern int32_t cfsio_reg_set(void *pv_arg);
 extern int32_t cfsio_versid_get(void *pv_arg);
 
 extern int32_t cfsio_pwrinfo_get(void *pv_arg);
+
+extern int32_t cfsio_set_intr(void *pv_arg);
+
+extern int32_t cfsio_get_intr(void *pv_arg);
+
+extern int32_t cfsio_get_intr_status(void *pv_arg);
+
+extern int32_t cfsio_clr_intr(void *pv_arg);
 
 #endif
 
